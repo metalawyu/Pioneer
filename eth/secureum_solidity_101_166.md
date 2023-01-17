@@ -6,492 +6,492 @@
 
 ## Solidity 101
 
-### 101 key aspects of Solidity
+### Solidity 的 101 个关键问题
 
 
 
-1. Solidity is a high-level language for implementing smart contracts on Ethereum (and the blockchains) targeting the EVM. Solidity was proposed in 2014 by Gavin Wood and was later developed by Ethereum’s Solidity team, led by Christian Reitwiessner, Alex Beregszaszi & others. (See [here](https://en.wikipedia.org/wiki/Solidity))
 
-2. It is influenced mainly by C++, a little from Python and early-on from JavaScript. The syntax and OOP concepts are from C++. Solidity’s modifiers, multiple inheritance, C3 linearization and the super keyword are influences from Python. Function-level scoping and var keyword were JavaScript influences early-on but those have been reduced since v0.4.0. (See [here](https://docs.soliditylang.org/en/v0.8.9/language-influences.html))
+1.  Solidity 是针对以太坊虚拟机（EVM）、旨在以太坊（和区块链）上实施智能合约的一种高级语言。Solidity 由加文·伍德（Gavin Wood）于 2014 年提出，后经克里斯蒂安·雷特维斯纳（Christian Reitwiessner）、亚历克斯·贝雷格萨西（Alex Beregszaszi）等人带领的以太坊 Solidity 团队开发。（参见[此处](https://en.wikipedia.org/wiki/Solidity))
+2. 它主要受C++的影响，在早期还受 Python、JavaScript 的些许影响。语法和 OOP 概念来自 C++。Solidity 的修饰符、多重继承、C3 线性化和超级关键字都受到 Python 的影响。函数级作用域和变量关键字在早期受 JavaScript 的影响，但自 v0.4.0 以来影响已有所减少。（参见[此处](https://docs.soliditylang.org/en/v0.8.9/language-influences.html))
 
-3. Solidity is statically typed, supports inheritance, libraries and complex user-defined types. It is a fully-featured high-level language.
+3. Solidity 是静态类型的，支持继承、库和复杂的用户定义类型。它是一种功能齐全的高级语言。
 
-4. The layout of a Solidity source file can contain an arbitrary number of pragma directives, import directives and struct/enum/contract definitions. The best-practices for layout within a contract is the following order: state variables, events, modifiers, constructor and functions.
+4. Solidity 源文件的布局可以包含任意数量的 pragma 指令、import 指令和 struct/enum/contract 定义。合约中布局的最佳实践如下：状态变量、事件、修饰符、构造器和函数。
 
-5. SPDX License Identifier: Solidity source files are recommended to start with a comment indicating its license e.g.:“*// SPDX-License-Identifier: MIT*”, where the compiler includes the supplied string in the bytecode metadata to make it machine readable. SPDX stands for Software Package Data Exchange (See [SPDX](https://spdx.org/)).
+5. SPDX 许可证标识符：建议 Solidity 源文件以表示其许可证的注释开头，例如：“*// SPDX-License-Identifier: MIT*”，其中：编译器将提供的字符串包含在字节码元数据中，以使其机器可读。SPDX 代表软件包数据交换（Software Package Data Exchange）（参见[SPDX](https://spdx.org/))。
 
-6. Pragmas: The pragma keyword is used to enable certain compiler features or checks. A pragma directive is always local to a source file, so you have to add the pragma to all your files if you want to enable it in your whole project. If you import another file, the pragma from that file does not automatically apply to the importing file. There are two types: 1) Version: a) Compiler version b) ABI Coder version 2) Experimental: a) SMTChecker
+6. Pragmas: pragma 关键字用于启用某些编译器功能或检查。pragma 指令始终是源文件的本地指令，因此，如果要在整个项目中启用它，必须将 pragma 添加到所有文件中。如果导入另一个文件，则该文件中的 pragma 不会自动应用于导入文件。有两种类型：1）版本：a）编译器版本 b）ABI 编码器版本 2）实验性：a）SMTChecker
 
-7. Version Pragma: This indicates the specific Solidity compiler version to be used for that source file and is used as follows: “*pragma solidity x.y.z;*” where x.y.z indicates the version of the compiler.
+7. 版本 Pragma: 这表示要用于该源文件的特定Solidity编译器版本，使用方式如下：“*pragma Solidity x.y.z；*”，其中x.y.z表示编译器的版本。
 
-   1. Using the version pragma does not change the version of the compiler. It also does not enable or disable features of the compiler. It just instructs the compiler to check whether its version matches the one required by the pragma. If it does not match, the compiler issues an error.
-   2. The latest compiler versions are in the 0.8.z range
-   3. A different y in x.y.z indicates breaking changes e.g. 0.6.0 introduces breaking changes over 0.5.z. A different z in x.y.z indicates bug fixes.
-   4. A ‘^’ symbol prefixed to x.y.z in the pragma indicates that the source file may be compiled only from versions starting with x.y.z until x.(y+1).z. For e.g., “*pragma solidity ^0.8.3;*” indicates that source file may be compiled with compiler version starting from 0.8.3 until any 0.8.z but not 0.9.z. This is known as a “floating pragma.”
-   5. Complex pragmas are also possible using ‘>’,’>=‘,’<‘ and ‘<=‘ symbols to combine multiple versions e.g. “*pragma solidity >=0.8.0 <0.8.3;*”
+   1. 使用版本 pragma 不会更改编译器的版本。它也不会启用或禁用编译器的功能，而只是指示编译器检查其版本是否与 pragma 所需的版本匹配。如果不匹配，编译器将报错。
+   2. 最新的编译器版本在 0.8.z 范围内
+   3. 在 x.y.z中 的 y 不同，表示中断更改，例如 0.6.0 引入对 0.5.z 的中断更改。x.y.z 中的 z 不同表示错误修复。
+   4. pragma 中 x.y.z 的前缀为“^”符号，表示源文件只能从 x.y.z 到 x.（y+1）.z 版本进行编译。例如，“*pragma solidity^0.8.3；*” 表示源文件可以从 0.8.3 到任何 0.8.z 而不是 0.9.z 的编译器版本进行编译。这被称为““floating pragma”。
+   5. 复杂的 pragma 还使用 “>”、“>=”、“<”和“<=”符号，以组合多个版本，例如 “*pragma solidity>=0.8.0 <0.8.3;*” 
 
-8. ABI Coder Pragma: This indicates the choice between the two implementations of the ABI encoder and decoder: “*pragma abicoder v1;*” or “*pragma abicoder v2;”* 
+8. ABIcoder Pragma：表示ABI编码器和解码器这两种实现之间的选择：“*Pragma abicoder v1；*”或“*prapragma ABI Coder v2；”*
 
-   1. The new ABI coder (v2) is able to encode and decode arbitrarily nested arrays and structs. It might produce less optimal code and has not received as much testing as the old encoder. This is activated by default.
-   2. The set of types supported by the new encoder is a strict superset of the ones supported by the old one. Contracts that use it can interact with ones that do not without limitations. The reverse is possible only as long as the non-abicoder v2 contract does not try to make calls that would require decoding types only supported by the new encoder. The compiler can detect this and will issue an error. Simply enabling abicoder v2 for your contract is enough to make the error go away.
-   3. This pragma applies to all the code defined in the file where it is activated, regardless of where that code ends up eventually. This means that a contract whose source file is selected to compile with ABI coder v1 can still contain code that uses the new encoder by inheriting it from another contract. This is allowed if the new types are only used internally and not in external function signatures.
+   1. 新的ABIcoder（v2）能够对任意嵌套的数组和结构进行编码和解码。产生的最佳代码更少，并且接受的测试也没有旧编码器多。默认情况下会激活此功能。
+   2. 新编码器所支持的类型集是旧编码器所支持类型的严格超集。使用它的合约可以没有限制地与没有使用它的合约进行交互。只有在非abi编码器 v2合约不尝试进行需要新编码器支持的解码类型的调用时，才能实现还原操作。编译器可以检测到这一点，并将报错。只需为你的合约启用abicoder v2就足以消除错误。
+   3. 此 pragma 适用于在激活它的文件中定义的所有代码，而不管该代码最终在何处结束。这意味着，其源文件被选择为使用ABI编码器v1编译的合约，通过从另一个合约继承新编码器，仍然可以包含使用新编码器的代码。如果新类型仅在内部使用，而不在外部函数签名中使用，则允许这样做。
 
-9. Experimental Pragma: This can be used to enable features of the compiler or language that are not yet enabled by default
+9. 实验Pragma：可用于启用编译器的功能或默认未启用的语言
 
-   1. SMTChecker: The use of “*pragma experimental SMTChecker;”* performs additional safety checks which are obtained by querying an SMT solver (See [SMTChecker](https://docs.soliditylang.org/en/v0.8.9/smtchecker.html#formal-verification))
-   2. The SMTChecker module automatically tries to prove that the code satisfies the specification given by require and assert statements. That is, it considers require statements as assumptions and tries to prove that the conditions inside assert statements are always true. If an assertion failure is found, a counterexample may be given to the user showing how the assertion can be violated. If no warning is given by the SMTChecker for a property, it means that the property is safe.
-   3. Other checks: Arithmetic underflow and overflow, Division by zero, Trivial conditions and unreachable code, Popping an empty array, Out of bounds index access, Insufficient funds for a transfer.
+   1. SMTChecker: 使用“*pragma experimental SMTChecker；”*执行通过查询SMT解算器获得的附加安全检查（参见 [SMTChecker](https://docs.soliditylang.org/en/v0.8.9/smtchecker.html#formal-verification))
+   2. SMTChecker模块自动尝试证明代码满足require和assert语句给出的规范。也就是说，它将require语句视为假设，并试图证明assert语句中的条件总是正确的。如果发现断言失败，可以向用户提供反例，说明如何违反断言。如果SMTChecker未对某个属性发出警告，则表示该属性是安全的。
+   3. 其他检查：算术下溢和溢出、除以零、没用的条件和无法访问的代码、弹出空数组、超出范围的索引访问、传输资金不足。
 
-10. Imports: Solidity supports import statements to help modularise your code that are similar to those available in JavaScript (from ES6 on) e.g. “*import “filename”;*"
+10. 导入: Solidity支持 import 语句，以帮助模块化你的代码，这些代码与JavaScript中的代码类似（从ES6开始），例如“*import”filename*"
 
-11. Comments: Single-line comments (//) and multi-line comments (/*...*/) are possible. Comments are recommended as in-line documentation of what contracts, functions, variables, expressions, control and data flow are expected to do as per the implementation, and any assumptions/invariants made/needed. They help in readability and maintainability.
+11. 注释: 单行注释（//）和多行注释（/*…*/）是可能的。建议将注释作为内嵌文档，说明实现时合约、函数、变量、表达式、控制和数据流的预期功能，以及所做/需要的任何假设/不变量。它们有助于提高可读性和可维护性。
 
-12. NatSpec Comments: NatSpec stands for “Ethereum Natural Language Specification Format.” These are written with a triple slash (///) or a double asterisk block(/** ... */) directly above function declarations or statements to generate documentation in JSON format for developers and end-users. It is recommended that Solidity contracts are fully annotated using NatSpec for all public interfaces (everything in the ABI). These comments contain different types of tags:
+12. NatSpec 注释: NatSpec代表“以太坊自然语言规范格式”（Ethereum Natural Language Specification Format）。这些格式在函数声明或语句的正上方用三斜杠（///）或双星号块（/**…*/）编写，以便为开发人员和最终用户生成JSON格式的文档。建议对所有公共接口（ABI中的所有接口）使用NatSpec对Solidity合约进行完全注释。这些注释包含不同类型的标记：
 
-    1. @title: A title that should describe the contract/interface
-    2. @author: The name of the author (for contract, interface)
-    3. @notice: Explain to an end user what this does (for contract, interface, function, public state variable, event)
-    4. @dev: Explain to a developer any extra details (for contract, interface, function, state variable, event)
-    5. @param: Documents a parameter (just like in doxygen) and must be followed by parameter name (for function, event)
-    6. @return: Documents the return variables of a contract’s function (function, public state variable)
-    7. @inheritdoc: Copies all missing tags from the base function and must be followed by the contract name (for function, public state variable)
-    8. @custom…: Custom tag, semantics is application-defined (for everywhere)
+    1. @title: 描述合约/界面的标题
+    2. @author: 作者姓名（合约、界面）
+    3. @notice: 向最终用户解释这是什么（合约、接口、功能、公共状态变量、事件）
+    4. @dev: 向开发人员解释任何其他详情（合约、接口、功能、状态变量、事件）
+    5. @param: 记录一个参数（就像在doxygen中一样），并且必须后跟参数名称（对于函数、事件）
+    6. @return: 记录合约函数的返回变量（函数、公共状态变量）
+    7. @inheritdoc: 复制基函数中所有缺失的标记，并且必须后跟合约名称（对于函数，公共状态变量）
+    8. @custom…: 自定义标记，语义由应用程序定义（适用于任何地方）
 
-13. Contracts: They are similar to classes in object-oriented languages in that they contain persistent data in state variables and functions that can modify these variables. Contracts can inherit from other contracts
+13. 合约：它们类似于面向对象语言中的类，因为它们在状态变量和可以修改这些变量的函数中包含持久数据。合约可以继承自其他合约。
 
-14. Contracts can contain declarations of State Variables, Functions, Function Modifiers, Events, Errors, Struct Types and Enum Types
+14. 合约可以包含状态变量、函数、函数修饰符、事件、错误、结构类型和枚举类型的声明。
 
-15. State Variables: They are variables that can be accessed by all functions of the contract and whose values are permanently stored in contract storage
+15. 状态变量：它们是可由合约的所有函数访问的变量，其值永久存储在contract storage中。
 
-16. State Visibility Specifiers: State variables have to be specified as being public, internal or private:
+16. 状态可见性说明符：必须将状态变量指定为public, internal 或 private：
 
-    1. public: Public state variables are part of the contract interface and can be either accessed internally or via messages. An automatic getter function is generated.
-    2. internal: Internal state variables can only be accessed internally from within the current contract or contracts deriving from it
-    3. private: Private state variables can only be accessed from the contract they are defined in and not even in derived contracts. Everything that is inside a contract is visible to all observers external to the blockchain. Making variables private only prevents other contracts from reading or modifying the information, but it will still be visible to the whole world outside of the blockchain.
+    1. public: 公开状态变量是合约接口的一部分，可以在内部或通过消息访问。生成自动getter函数。
+    2. internal: 内部状态变量只能从当前合约或从其派生的合约内部访问
+    3. private: 隐秘状态变量只能从其定义的合约中访问，甚至不能在派生合约中访问。合约中的所有内容对区块链外部的所有观察者都是可见的。将变量设为private只会阻止其他合约读取或修改信息，但区块链之外的整个世界仍然可以看到这些信息。
 
-17. State Variables: Constant & Immutable
+17. 状态变量：常量和不可变变量
 
-    1. State variables can be declared as *constant* or *immutable*. In both cases, the variables cannot be modified after the contract has been constructed. For *constant* variables, the value has to be fixed at compile-time, while for *immutable*, it can still be assigned at construction time i.e. in the constructor or point of declaration.
-    2. For constant variables, the value has to be a constant at compile time and it has to be assigned where the variable is declared. Any expression that accesses storage, blockchain data (e.g. block.timestamp, address(this).balance or block.number) or execution data (msg.value or gasleft()) or makes calls to external contracts is disallowed.
-    3. Immutable variables can be assigned an arbitrary value in the constructor of the contract or at the point of their declaration. They cannot be read during construction time and can only be assigned once.
-    4. The compiler does not reserve a storage slot for these variables, and every occurrence is replaced by the respective value.
+    1. 状态变量可以声明为*constant*常量或*immutable*不可变量。在这两种情况下，变量都不能在构建合约后进行修改。对于*constant*常量变量，值必须在编译时固定，而对于*immutable*不可变变量，它仍然可以在构造时赋值，即在构造器或声明点中赋值。
+    2. 对于常量变量，该值在编译时必须是常量，并且必须在声明变量的位置赋值。不允许任何访问存储、区块链数据（例如block.timestamp, address（this）, balance或block.number）或执行数据（msg.value或gasleft（））或调用外部合约的表达式。
+    3. 不可变变量可以在合约的构造函数中或在其声明时指定任意值。它们在实现期间无法读取，只能赋值一次。
+    4. 编译器不会为这些变量保留存储槽，每次出现都会被相应的值替换。
 
-18. Compared to regular state variables, the gas costs of constant and immutable variables are much lower:
+18. 与常规状态变量相比，常量变量和不可变变量的 gas 成本要低得多：
 
-    1. For a constant variable, the expression assigned to it is copied to all the places where it is accessed and also re-evaluated each time. This allows for local optimizations.
-    2. Immutable variables are evaluated once at construction time and their value is copied to all the places in the code where they are accessed. For these values, 32 bytes are reserved, even if they would fit in fewer bytes. Due to this, constant values can sometimes be cheaper than immutable values.
-    3. The only supported types are strings (only for constants) and value types.
+    1. 对于常量变量，分配给它的表达式会复制到它被访问的所有位置，并且每次都会重新计算。这允许进行局部优化。
+    2. 不可变变量在构建时求值一次，其值被复制到代码中访问它们的所有位置。对于这些值，保留32个字节，即使它们可以容纳更少的字节。因此，常量值有时比不可变值便宜。
+    3. 唯一支持的类型是字符串（仅用于常量）和值类型。
 
-19. Functions: Functions are the executable units of code. Functions are usually defined inside a contract, but they can also be defined outside of contracts. They have different levels of visibility towards other contracts.
+19. 函数：函数是代码的可执行单元。函数通常在合约内定义，但也可以在合约外定义。它们对其他合约有不同程度的可见性。
 
-20. Function parameters: Function parameters are declared the same way as variables, and the name of unused parameters can be omitted. Function parameters can be used as any other local variable and they can also be assigned to.
+20. 函数参数：函数参数的声明方式与变量相同，可以省略未使用参数的名称。函数参数可以用作任何其他局部变量，也可以被赋值。
 
-21. Function Return Variables: Function return variables are declared with the same syntax after the *returns* keyword. 
+21. 函数返回变量：函数返回变量在*returns*关键字之后使用相同的语法声明。
 
-    1. The names of return variables can be omitted. Return variables can be used as any other local variable and they are initialized with their default value and have that value until they are (re-)assigned.
-    2. You can either explicitly assign to return variables and then leave the function as above, or you can provide return values (either a single or multiple ones) directly with the return statement
-    3. If you use an early return to leave a function that has return variables, you must provide return values together with the return statement
-    4. When a function has multiple return types, the statement return (v0, v1, ..., vn) can be used to return multiple values. The number of components must be the same as the number of return variables and their types have to match, potentially after an implicit conversion
+    1. 返回变量的名称可以省略。返回变量可以用作任何其他局部变量，它们用默认值初始化，并具有该值，直到它们被（重新）赋值。
+    2. 可以显式地赋值给返回变量，然后将函数保持为上述状态，也可以直接使用return语句提供返回值（单个或多个）。
+    3. 如果使用早期返回变量以离开具有返回变量的函数，则必须提供返回值和return语句。
+    4. 当函数具有多个返回类型时，语句return（v0，v1，…，vn）可用于返回多个值。组件的数量必须与返回变量的数量相同，并且它们的类型必须匹配（可能在隐式转换之后）。
 
-22. Function Modifiers: They can be used to change the behaviour of functions in a declarative way. For example, you can use a modifier to automatically check a condition prior to executing the function. The function’s control flow continues after the “_” in the preceding modifier. Multiple modifiers are applied to a function by specifying them in a whitespace-separated list and are evaluated in the order presented. The modifier can choose not to execute the function body at all and in that case the return variables are set to their default values just as if the function had an empty body. The _ symbol can appear in the modifier multiple times. Each occurrence is replaced with the function body.
+22. 函数修饰符：它们可以用于以声明的方式更改函数的行为。例如，可以使用修饰符在执行函数之前自动检查条件。函数的控制流在前面修饰符中的“_”之后继续。通过在空格分隔的列表中指定多个修饰符，可以将它们应用于函数，并按照呈现的顺序进行求值。修饰符可以选择完全不执行函数体，在这种情况下，返回变量被设置为默认值，就像函数有一个空体一样。_符号可以多次出现在修饰符中。每个引用都将替换为函数体。
 
-23. Function Visibility Specifiers: Functions have to be specified as being *public*, *external*, *internal* or *private:*
+23. 函数可见性说明符：函数必须指定为*public*、*external*、*internal*或*private：*
 
-    1. *public:* Public functions are part of the contract interface and can be either called internally or via messages. 
-    2. *external:* External functions are part of the contract interface, which means they can be called from other contracts and via transactions. An external function f cannot be called internally (i.e. f() does not work, but this.f() works).
-    3. *internal:* Internal functions can only be accessed internally from within the current contract or contracts deriving from it
-    4. *private:* Private functions can only be accessed from the contract they are defined in and not even in derived contracts
+    1. *public:* Public 函数是合约接口的一部分，可以在内部调用，也可以通过消息调用。
+    2. *external:* External 函数是合约接口的一部分，这意味着，可以从其他合约和通过交易调用它们。不能在内部调用外部函数f（即，f（）不起作用，但this.f（）起作用）。
+    3. *internal:* Internal 函数只能从当前合约或从其派生的合约内部访问。
+    4. *private:* Private 函数只能从定义它们的合约中访问，甚至不能在派生合约中访问。
 
-24. Function Mutability Specifiers: Functions can be specified as being *pure* or *view*:
+24. 函数可变性说明符：函数可以指定为*pure*或*view*：
 
-    1. *view* functions can read contract state but cannot modify it. This is enforced at runtime via *STATICCALL* opcode. The following are considered state modifying: 1) Writing to state variables 2) Emitting events 3) Creating other contracts 4) Using selfdestruct 5) Sending Ether via calls 6) Calling any function not marked view or pure 7) Using low-level calls 8) Using inline assembly that contains certain opcodes.
-    2. *pure* functions can neither read contract state nor modify it. The following are considered reading from state: 1) Reading from state variables 2) Accessing address(this).balance or <address>.balance 3) Accessing any of the members of block, tx, msg (with the exception of msg.sig and msg.data) 4) Calling any function not marked pure 5) Using inline assembly that contains certain opcodes.
-    3. It is not possible to prevent functions from reading the state at the level of the EVM. It is only possible to prevent them from writing to the state via *STATICCALL.* Therefore, only *view* can be enforced at the EVM level, but not *pure*.
+    1. *view* 函数可以读取合约状态，但不能修改。这是在运行时通过*STATICCALL*操作码实现的。以下被认为是状态修改：1）写入状态变量 2）发出事件 3）创建其他合约 4）使用自毁 5）通过调用发送Ether 6）调用任何未标记为view或pure的函数 7）使用低级调用 8）使用包含某些操作码的内联程序集。
+    2. *pure* 函数既不能读取也不能修改合约状态。以下被认为是从状态读取：1）从状态变量读取 2）访问address（this）.balance或 <address>.balance 3) 访问block、tx、msg的任何成员（msg.sig和msg.data除外）4）调用任何未标记为pure的函数5）使用包含某些操作码的内联程序集。
+    3. 不可能阻止各功能读取以太坊虚拟机级别的状态。只能通过*STATICALL.*阻止其写入状态。因此，在以太坊虚拟机级别只能强制执行*view*，而不能强制执行*pure*。
 
-25. Function Overloading: A contract can have multiple functions of the same name but with different parameter types. This process is called “overloading.”
+25. 函数重载：一个合约可以有多个同名但参数类型不同的函数。这个过程称为“重载”。
 
-    1. Overloaded functions are selected by matching the function declarations in the current scope to the arguments supplied in the function call.
-    2. Return parameters are not taken into account for overload resolution.
+    1. 通过将当前作用域中的函数声明与函数调用中提供的argument参数匹配，可以选择重载函数。
+    2. 重载解析不考虑返回参数。
 
-26. Free Functions: Functions that are defined outside of contracts are called “free functions” and always have implicit internal visibility. Their code is included in all contracts that call them, similar to internal library functions.
+26. 自由函数：在合约之外定义的函数称为“自由函数”，并且始终具有隐式的内部可见性。它们的代码包含在调用它们的所有合约中，类似于内部库函数。
 
-27. Events: They are an abstraction on top of the EVM’s logging functionality. Emitting events cause the arguments to be stored in the transaction’s log - a special data structure in the blockchain. These logs are associated with the address of the contract, are incorporated into the blockchain, and stay there as long as a block is accessible. The Log and its event data is not accessible from within contracts (not even from the contract that created them). Applications can subscribe and listen to these events through the RPC interface of an Ethereum client.
+27. 事件：它们是EVM日志功能之上的抽象。发出事件会导致argument参数存储在交易日志中，这是区块链中的一种特殊数据结构。这些日志与合约地址相关联，并被纳入区块链，只要区块可以访问，这些日志就一直存在。日志及其交易数据不能从合约中访问（甚至不能从创建它们的合约中访问）。应用程序可以通过以太坊客户端的RPC接口订阅和监听这些事件。
 
-28. Indexed Event Parameters: Adding the attribute *indexed* for up to three parameters adds them to a special data structure known as “topics” instead of the data part of the log. If you use arrays (including string and bytes) as indexed arguments, its Keccak-256 hash is stored as a topic instead, this is because a topic can only hold a single word (32 bytes). All parameters without the *indexed* attribute are ABI-encoded into the data part of the log. Topics allow you to search for events, for example when filtering a sequence of blocks for certain events. You can also filter events by the address of the contract that emitted the event.
+28. 索引事件参数：为最多三个参数添加属性*Indexed*会将它们添加到称为“topics”的特殊数据结构中，而不是日志的数据部分。如果使用数组（包括字符串和字节）作为索引argument参数，则其Keccak-256哈希值将作为topic存储，这是因为topic只能保存单个单词（32字节）。所有没有*indexed*属性的参数都被ABI编码到日志的数据部分。可以通过topics搜索事件（例如：在筛选特定事件的块序列时）。还可以根据发出事件的合约的地址来筛选事件。
 
-29. Emit: Events are emitted using `emit`, followed by the name of the event and the arguments e.g. “*emit Deposit(msg.sender, _id, msg.value);*”
+29. Emit：使用“Emit”发出事件，后跟事件名称和argument参数，例如“*Emit Deposit（msg.sender，_id，msg.value）；*”。
 
-30. Struct Types: They are custom defined types that can group several variables of same/different types together to create a custom data structure. The struct members are accessed using ‘.’ e.g.: struct s {address user; uint256 amount} where s.user and s.amount access the struct members.
+30. 结构类型：它们是自定义的定义类型，可以将相同/不同类型的多个变量组合在一起，以创建自定义数据结构。使用“.”访问结构成员，如：struct s｛address user；uint256 amount｝，其中s.user和s.amount访问结构成员。
 
-31. Enums: They can be used to create custom types with a finite set of constant values to improve readability. They need a minimum of one member and can have a maximum of 256. They can be explicitly converted to/from integers. The options are represented by unsigned integer values starting from 0. The default value is the first member.
+31. 枚举：它们可用于创建具有有限常量值集的自定义类型，以提高可读性。至少需要一个成员，最多可以有256个成员。它们可以显式转换为整数/从整数转换。这些选项由从0开始的无符号整数值表示。默认值是第一个成员。
 
-32. Constructor: Contracts can be created “from outside” via Ethereum transactions or from within Solidity contracts. When a contract is created, its constructor (a function declared with the *constructor* keyword) is executed once. A constructor is optional and only one constructor is allowed. After the constructor has executed, the final code of the contract is stored on the blockchain. This code includes all public and external functions and all functions that are reachable from there through function calls. The deployed code does not include the constructor code or internal functions only called from the constructor.
+32. 构造器: 合约可以通过以太坊交易“从外部”创建，也可以在Solidity合约中创建。创建合约时，其构造器（用*constructor*关键字声明的函数）执行一次。构造器是可选的，只允许一个构造器。构造器执行后，合约的最终代码存储在区块链上。该代码包括所有public和external函数以及通过函数调用可以从那里访问的所有函数。部署的代码不包括构造器代码或仅从构造器调用的内部函数。
 
-33. Receive Function: A contract can have at most one *receive* function, declared using *receive() external payable { ... }* without the function keyword. This function cannot have arguments, cannot return anything and must have external visibility and payable state mutability.
+33. Receive 函数：一个合约最多可以有一个*Receive*函数，使用*Receive（）external payable｛…｝*声明，而不使用函数关键字。此函数不能有argument参数，不能返回任何内容，并且必须具有外部可见性和 payable 状态可变性。
 
-    1. The receive function is executed on a call to the contract with empty calldata. This is the function that is executed on plain Ether transfers via *.send()* or *.transfer()*.
-    2. In the worst case, the receive function can only rely on 2300 gas being available (for example when send or transfer is used), leaving little room to perform other operations except basic logging
-    3. A contract without a receive Ether function can receive Ether as a recipient of a *coinbase transaction* (aka miner block reward) or as a destination of a *selfdestruct*. A contract cannot react to such Ether transfers and thus also cannot reject them. This means that *address(this).balance* can be higher than the sum of some manual accounting implemented in a contract (i.e. having a counter updated in the receive Ether function).
+    1. receive函数在调用具有空calldata的合约时执行。这是通过*.send（）*或*.transfer（）*在普通以太网上执行的函数。
+    2. 在最坏的情况下，receive 函数只能依靠 2300 可用gas（例如，当使用发送或传输时），除了基本的日志记录外，几乎没有空间执行其他操作。
+    3. 没有接收以太币功能的合约可以作为*coinbase transaction*（也称为矿工区块奖励）的接收者或*selfdestruct*的目的地接收以太币。合约不能对这种以太币转账作出反应，因此也不能拒绝它们。这意味着，*address（This）.balance*可能高于合约中执行的某些人工记账的总和（即，在接收以太功能中更新计数器）。
 
-34. Fallback Function: A contract can have at most one fallback function, declared using either *fallback () external [payable]* or *fallback (bytes calldata _input) external [payable] returns (bytes memory _output),* both without the function keyword. This function must have external visibility.
+34. Fallback 函数：一个合约最多可以有一个fallback函数，使用*Fallback（）external[payable]*或*fallball（bytescalldata_input）external[payable]return（bytesmemory_output）声明，*两者都不使用函数关键字。此函数必须具有外部可见性。
 
-    1. The fallback function is executed on a call to the contract if none of the other functions match the given function signature, or if no data was supplied at all and there is no receive Ether function. The fallback function always receives data, but in order to also receive Ether it must be marked payable.
-    2. In the worst case, if a payable fallback function is also used in place of a receive function, it can only rely on 2300 gas being available
+    1. 如果没有其他函数与给定的函数签名匹配，或者根本没有提供数据并且没有接收 Ether 函数，则在调用合约时执行fallback函数。fallback函数始终接收数据，但为了接收以太币，必须将其标记为“payable”。
+    2. 在最坏的情况下，如果还使用fallback函数代替receive函数，则只能依靠2300可用gas。
 
-35. Solidity is a statically-typed language, which means that the type of each variable (state and local) needs to be specified in code at compile-time. This is unlike dynamically-typed languages where types are required only with runtime values. Statically-typed languages perform compile-time type-checking according to the language rules. Other examples are C, C++, Java, Rust, Go, Scala.
+35. Solidity是一种静态类型语言，这意味着，需要在编译时在代码中指定每个变量的类型（状态和局部）。这与动态类型语言不同，在动态类型语言中，只有运行时值才需要类型。静态类型语言根据语言规则执行编译时类型检查。其他例子有C、C++、Java、Rust、Go、Scala。
 
-36. Solidity has two categories of types: Value Types and Reference Types. Value Types are called so because variables of these types will always be passed by value, i.e. they are always copied when they are used as function arguments or in assignments. In contrast, Reference Types can be modified through multiple different names i.e. references to the same underlying variable.
+36. Solidity有两大类型：值类型和引用类型。之所以调用值类型，是因为这些类型的变量将始终按值传递，即当它们用作函数argument参数或赋值时，总是被复制。相反，可以通过多个不同的名称修改引用类型，即对同一基础变量的引用。
 
-37. Value Types: Types that are passed by value, i.e. they are always copied when they are used as function arguments or in assignments — Booleans, Integers, Fixed Point Numbers, Address, Contract, Fixed-size Byte Arrays (bytes1, bytes2, …, bytes32), Literals (Address, Rational, Integer, String, Unicode, Hexadecimal), Enums, Functions.
+37. 值类型：按值传递的类型，即，当它们用作函数 arguments 参数或赋值时，它们总是被复制-布尔值、整数、固定点数、地址、合约、固定大小字节数组（字节1、字节2、…、字节32）、字面量（地址、有理数、整数、字符串、Unicode、十六进制）、枚举、函数。
 
-38. Reference Types: Types that can be modified through multiple different names. Arrays (including Dynamically-sized bytes array *bytes* and *string),* Structs, Mappings.
+38. 引用类型：可以通过多个不同名称修改的类型。数组（包括动态大小的字节数组*bytes* 和 *string),*结构、映射。
 
-39. Default Values: A variable which is declared will have an initial default value whose byte-representation is all zeros. The “default values” of variables are the typical “zero-state” of whatever the type is. For example, the default value for a bool is false. The default value for the uint or int types is 0. For statically-sized arrays and bytes1 to bytes32, each individual element will be initialized to the default value corresponding to its type. For dynamically-sized arrays, bytes and string, the default value is an empty array or string. For the enum type, the default value is its first member.
+39. 默认值：声明的变量将具有初始默认值，其字节表示形式为全零。变量的“默认值”是任何类型的典型“零状态”。例如，布尔值的默认值为false。uint或int类型的默认值为0。对于静态大小的数组和字节1到字节32，每个单独的元素都将被初始化为与其类型对应的默认值。对于动态大小的数组、字节和字符串，默认值为空数组或字符串。对于枚举类型，默认值是其第一个成员。
 
-40. Scoping: Scoping in Solidity follows the widespread scoping rules of C99
+40. 作用域：Solidity中的作用域遵循C99广泛的作用域规则。
 
-    1. Variables are visible from the point right after their declaration until the end of the smallest { }-block that contains the declaration. As an exception to this rule, variables declared in the initialization part of a for-loop are only visible until the end of the for-loop.
-    2. Variables that are parameter-like (function parameters, modifier parameters, catch parameters, …) are visible inside the code block that follows - the body of the function/modifier for a function and modifier parameter and the catch block for a catch parameter.
-    3. Variables and other items declared outside of a code block, for example functions, contracts, user-defined types, etc., are visible even before they were declared. This means you can use state variables before they are declared and call functions recursively.
+    1. 变量从声明后到包含声明的最小{}-块的末尾都是可见的。作为此规则的例外，在for循环的初始化部分中声明的变量仅在for循环结束之前可见。
+    2. 类似参数的变量（函数参数、修饰符参数、catch参数…）在后面的代码块中可见-函数和修饰符参数的函数/修饰符的主体和catch参数的catch块。
+    3. 在代码块外部声明的变量和其他项，例如函数、合约、用户定义类型等，甚至在声明之前都是可见的。这意味着，你可以在声明状态变量之前使用它们，并递归调用函数。
 
-41. Boolean: bool Keyword and the possible values are constants true and false. 
+41. 布尔值：bool关键字和可能的值为常量true和false。
 
-    1. Operators are ! (logical negation) && (logical conjunction, “and”) || (logical disjunction, “or”)== (equality) and != (inequality). 
-    2. The operators || and && apply the common short-circuiting rules. This means that in the expression f(x) || g(y), if f(x) evaluates to true, g(y) will not be evaluated even if it may have side-effects.
+    1. 运算符是！（逻辑非）&&（逻辑与，“and”）||（逻辑或，“or”）==（相等）和！=（不相等）。
+    2. 运算符||和&&应用常见的短路规则。这意味着，在表达式f（x）||g（y）中，如果f（x（x）的计算结果为真，则即使g（y）可能有副作用，也不会对其进行计算。
 
-42. Integers: int / uint: Signed and unsigned integers of various sizes. Keywords uint8 to uint256 in steps of 8 (unsigned of 8 up to 256 bits) and int8 to int256. uint and int are aliases for uint256 and int256, respectively. Operators are: 
+42. 整数：int/uint：各种大小的有符号和无符号整数。关键字uint8到uint256，步长为8（8到256位的无符号）和int8到int256。uint和int分别是uint256和int256的别名。运算符包括：
 
-    1. Comparisons: <=, <, ==, !=, >=, > (evaluate to bool)
-    2. Bit operators: &, |, ^ (bitwise exclusive or), ~ (bitwise negation)
-    3. Shift operators: << (left shift), >> (right shift)
-    4. Arithmetic operators: +, -, unary - (only for signed integers), *, /, % (modulo), ** (exponentiation)
+    1. 比较：<=, <, ==, !=, >=, > (计算结果为布尔值)
+    2. 位运算符：&、|、^（按位异或）、~（按位求反）
+    3. 移位运算符：<<（左移位），>>（右移位）
+    4. 算术运算符：+、-、一元-（仅适用于有符号整数）、*、/、%（模）、**（乘幂）
 
-43. Integers in Solidity are restricted to a certain range. For example, with uint32, this is 0 up to 2**32 - 1. There are two modes in which arithmetic is performed on these types: The “wrapping” or “unchecked” mode and the “checked” mode. By default, arithmetic is always “checked”, which means that if the result of an operation falls outside the value range of the type, the call is reverted through a failing assertion. You can switch to “unchecked” mode using unchecked { ... }. This was introduced in compiler version 0.8.0.
+43. Solidity中的整数限制在一定范围内。例如，对于uint32，这是0到2**32-1。对这些类型执行算术运算的模式有两种：“wrapped”或“unchecked”模式和“checked”模式。默认情况下，算术总是“checked”的，这意味着，如果操作的结果超出了类型的值范围，则通过失败的断言来revert调用。可以使用unchecked｛…｝切换到“unchecked”模式。这是在编译器版本0.8.0中引入的。
 
-44. Fixed Point Numbers: Fixed point numbers using keywords *fixed* / *ufixed* are not fully supported by Solidity yet. They can be declared, but cannot be assigned to or from. There are fixed-point libraries that are widely used for this such as DSMath, PRBMath, ABDKMath64x64 etc.
+44. 固定点数：Solidity尚未完全支持使用关键字*Fixed*/*ufixed*的固定点数。它们可以声明，但不能作为赋值的对象或来源。有一些定点库广泛用于此，如：DSMath、PRBMath、ABDKMath64x64等。
 
-45. Address Type: The address type comes in two types: (1) *address*: Holds a 20 byte value (size of an Ethereum address) (2) *address payable*: Same as *address*, but with the additional members *transfer* and *send*. *address payable* is an address you can send Ether to, while a plain *address* cannot be sent Ether. 
+45. 地址类型：地址类型有两种类型：（1）*address*：保存20字节值（以太坊地址的大小）（2）*address payable*：与*address*相同，但具有额外成员*transfer*和*send*。*address payabl*是可以发送以太币的地址，而普通*address*不能发送以太币。
 
-    1. Operators are <=, <, ==, !=, >= and >
-    2. Conversions: Implicit conversions from *address payable* to *address* are allowed, whereas conversions from *address* to *address payable* must be explicit via *payable(<address>)*. Explicit conversions to and from *address* are allowed for *uint160*, integer literals, *bytes20* and contract types. 
-    3. Only expressions of type *address* and contract-type can be converted to the type *address payable* via the explicit conversion *payable(...)*. For contract-type, this conversion is only allowed if the contract can receive Ether, i.e., the contract either has a receive or a payable fallback function.
+    1. 运算符是 <=, <, ==, !=, >= 和 >。
+    2. 转换：允许从*address payable*到*address*的隐式转换，而从*address*到*address payable*的转换必须通过*payable*（<address>）*进行显式转换。对于*uint160*、整数字面量、*bytes20*和合约类型，允许向*address*进行显式转换和从*address*执行显式转换。
+    3. 只有类型*address*和合约类型的表达式可以通过显式转换*payable(...)*转换为类型*address payable*。对于合约类型，只有当合约可以接收以太币时，才允许进行此转换，即合约具有receive或fallback功能。
 
-46. Members of Address Type:
+46. 地址类型的成员：
 
-    1. *<address>.balance (uint256)*: balance of the Address in Wei
-    2. *<address>.code (bytes memory)*: code at the Address (can be empty)
-    3. *<address>.codehash (bytes32)*: the codehash of the Address
-    4. *<address payable>.transfer(uint256 amount)*: send given amount of Wei to Address, reverts on failure, forwards 2300 gas stipend, not adjustable
-    5. *<address payable>.send(uint256 amount)* returns (bool): send given amount of Wei to Address, returns false on failure, forwards 2300 gas stipend, not adjustable
-    6. *<address>.call(bytes memory)* returns (bool, bytes memory): issue low-level CALL with the given payload, returns success condition and return data, forwards all available gas, adjustable
-    7. *<address>.delegatecall(bytes memory)* returns (bool, bytes memory): issue low-level DELEGATECALL with the given payload, returns success condition and return data, forwards all available gas, adjustable
-    8. *<address>.staticcall(bytes memory)* returns (bool, bytes memory): issue low-level STATICCALL with the given payload, returns success condition and return data, forwards all available gas, adjustable
+    1. *<address>.balance (uint256)*: Wei为单位的地址余额
+    2. *<address>.code (bytes memory)*: 地址处的代码（可以为空）
+    3. *<address>.codehash (bytes32)*: 地址的codehash
+    4. *<address payable>.transfer(uint256 amount)*: 向地址发送给定数量的Wei，失败时revert，转发2300津贴 gas，不可调整
+    5. *<address payable>.send(uint256 amount)* returns (bool): 向地址发送给定数量的Wei，失败时返回错误，转发2300 津贴gas，不可调整
+    6. *<address>.call(bytes memory)* returns (bool, bytes memory): 使用给定的有效载荷发出低级别CALL，返回成功条件和返回数据，转发所有可用的 gas，可调整
+    7. *<address>.delegatecall(bytes memory)* returns (bool, bytes memory): 使用给定的有效载荷发出低级DELEGATECALL，返回成功条件和返回数据，转发所有可用的 gas，可调整
+    8. *<address>.staticcall(bytes memory)* returns (bool, bytes memory): 使用给定的有效载荷发出低级别STATICCALL，返回成功条件和返回数据，转发所有可用 gas，可调整
 
-47. Transfer: The *transfer* function fails if the balance of the current contract is not large enough or if the Ether transfer is rejected by the receiving account. The *transfer* function reverts on failure. The code in *receive* function or if not present then in *fallback* function is executed with the transfer call. If that execution runs out of gas or fails in any way, the Ether transfer will be reverted and the current contract will stop with an exception.
+47. 转账：如果当前合约的余额不够大或接收账户拒收以太币转账，则*transfer*函数将失败。*transfer*函数在故障时revert。*receive*函数中的代码，如果不存在，则在*fallback*函数中使用转账调用执行代码。如果该执行耗尽了 gas 或以任何方式失败，以太币转账将被revert，当前合约将停止，但有例外。
 
-48. Send: The *send* function is the low-level counterpart of *transfer*. If the execution fails then *send* only returns false and does not revert unlike *transfer.* So the return value of *send* must be checked by the caller.
+48. 发送：*Send*函数是*transfer*的低级对应函数。如果执行失败，则*send*只返回false，不会像*transfer那样进行revert。*因此，调用方必须检查*send*的返回值。
 
-49. Call/Delegatecall/Staticcall: In order to interface with contracts that do not adhere to the ABI, or to get more direct control over the encoding, the functions *call*, *delegatecall* and *staticcall* are provided. They all take a single *bytes* memory parameter and return the success condition (as a bool) and the returned data *(bytes memory)*. The functions *abi.encode*, *abi.encodePacked*, *abi.encodeWithSelector* and *abi.encodeWithSignature* can be used to encode structured data.
+49. Call/Delegatecall/Staticcall：为了与不遵守ABI的合约对接，或者为了对编码进行更直接的控制，提供函数*call*, *delegatecall* 和 *staticcall* 。它们都接受一个*bytes*内存参数，并返回成功条件（作为布尔值）和返回的数据*（bytesmemory）*。函数*abi.encode*、*abi.encodePacked*、*abi.encodeWithSelector*和*abi.eencodeWithSignature*可用于编码结构化数据。
 
-    1. *gas* and *value* modifiers can be used with these functions (*delegatecall* doesn’t support *value*) to specify the amount of gas and Ether value passed to the callee.
-    2. With *delegatecall*, only the code of the given address is used but all other aspects (storage, balance, msg.sender etc.) are taken from the current contract. The purpose of *delegatecall* is to use library/logic code which is stored in callee contract but operate on the state of the caller contract
-    3. With staticcall, the execution will revert if the called function modifies the state in any way
+    1. *gas* 和 *value* 修饰符可以与这些函数一起使用（*delegatecall*不支持*value*），以指定传递给被调用者的 gas 量和Ether值。
+    2. 使用*delegatecall*时，只使用给定地址的代码，但所有其他方面（存储、余额、消息发送等）均取自当前合约。*delegatecall*的目的是使用存储在被调用方合约中但对调用方合约的状态进行操作的库/逻辑代码。
+    3. 使用staticcall，如果被调用函数以任何方式修改状态，则恢复执行。
 
-50. Contract Type: Every contract defines its own type. Contracts can be explicitly converted to and from the *address* type. Contract types do not support any operators. The members of contract types are the *external* functions of the contract including any state variables marked as public.
+50. 合约类型：每个合约都定义自己的类型。合约可以显式转换为*address*类型，也可以从*address*转换。合约类型不支持任何运算符。合约类型的成员是合约的*external*函数，包括标记为public的任何状态变量。
 
-51. Fixed-size Byte Arrays: The value types *bytes1, bytes2, bytes3, …, bytes32* hold a sequence of bytes from one to up to 32. The type *byte[]* is an array of bytes, but due to padding rules, it wastes 31 bytes of space for each element (except in storage). It is better to use the *bytes* type instead.
+51. 固定大小字节数组：值类型*bytes1、bytes2、bytes3、…、bytes32*包含从1到32的字节序列。类型*byte[]*是一个字节数组，但由于填充规则，每个元素浪费了31个字节的空间（存储中除外）。最好使用*bytes*类型。
 
-52. Literals: They can be of 5 types: 
+52. 字面量: 可以有5种类型：
 
-    1. Address Literals: Hexadecimal literals that pass the address checksum test are of address type. Hexadecimal literals that are between 39 and 41 digits long and do not pass the checksum test produce an error. The mixed-case address checksum format is defined in [EIP-55](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md).
-    2. Rational and Integer Literals: Integer literals are formed from a sequence of numbers in the range 0-9. Decimal fraction literals are formed by a . with at least one number on one side. Scientific notation is also supported, where the base can have fractions and the exponent cannot. Underscores can be used to separate the digits of a numeric literal to aid readability and are semantically ignored.
-    3. String Literals: String literals are written with either double or single-quotes ("foo" or ‘bar’). They can only contain printable ASCII characters and a set of escape characters
-    4. Unicode Literals: Unicode literals prefixed with the keyword *unicode* can contain any valid UTF-8 sequence. They also support the very same escape sequences as regular string literals.
-    5. Hexadecimal Literals: Hexadecimal literals are hexadecimal digits prefixed with the keyword hex and are enclosed in double or single-quotes e.g. *hex”001122FF”*, *hex'0011_22_FF'*.
+    1. 地址字面量：通过地址校验测试的十六进制字面量属于地址类型。长度在39到41位之间且未通过校验测试的十六进制字面量会产生错误。[EIP-55]中定义了混合大小写地址校验格式(https://github.com/ethereum/EIPs/blob/master/EIPS/eip-55.md)。
+    2. 有理数和整型字面量：整型字面量由0-9范围内的数字序列组成。小数部分字面量由一个.和一侧至少一个数字组成。还支持科学记数法，其中基数可以有分数，但指数不可以。下划线可用于分隔数字字面量的数字，以提高可读性，并在语义上被忽略。
+    3. 字符串字面量：字符串字面量用双引号或单引号（“foo”或“bar”）编写。它们只能包含可打印的ASCII字符和一组转义字符。
+    4. Unicode字面量：前缀为关键字*Unicode*的Unicode字面量可以包含任何有效的UTF-8序列。它们还支持与常规字符串字面量相同的转义序列。
+    5. 十六进制字面量：十六进制字面量是以关键字hex为前缀的十六进制数字，并用双引号或单引号括起来，例如：*hex“001122FF”*，*hex'0011_22_FF'*。
 
-53. Enums: Enums are one way to create a user-defined type in Solidity. They require at least one member and its default value when declared is the first member. They cannot have more than 256 members.
+53. 枚举：枚举是在Solidity中创建用户定义类型的一种方法。它们至少需要一个成员，声明时其默认值为第一个成员。其成员不能超过256个。
 
-54. Function Types: Function types are the types of functions. Variables of function type can be assigned from functions and function parameters of function type can be used to pass functions to and return functions from function calls. They come in two flavours - internal and external functions. Internal functions can only be called inside the current contract. External functions consist of an address and a function signature and they can be passed via and returned from external function calls.
+54. 函数类型：函数类型是函数的类型。函数类型的变量可以从函数中赋值，函数类型的函数参数可以用于向函数调用传递函数和从函数调用返回函数。它们有两种——内部和外部函数。内部函数只能在当前合约内调用。外部函数由地址和函数签名组成，它们可以通过外部函数调用传递和返回。
 
-55. Reference Types & Data Location: Every reference type has an additional annotation — the data location where it is stored. There are three data locations: *memory*, *storage* and *calldata*. 
+55. 引用类型和数据位置：每个引用类型都有一个附加的注释-存储它的数据位置。有三个数据位置：*memory*, *storage* 和 *calldata*。
 
-    1. *memory*: whose lifetime is limited to an external function call
-    2. *storage*: whose lifetime is limited to the lifetime of a contract and the location where the state variables are stored
-    3. *calldata*: which is a non-modifiable, non-persistent area where function arguments are stored and behaves mostly like memory. It is required for parameters of external functions but can also be used for other variables.
+    1. *memory*: 其生存期仅限于外部函数调用
+    2. *storage*: 其生存期限于合约生存期和存储状态变量的位置
+    3. *calldata*: 这是一个不可修改的、非持久的区域，其中存储函数argument参数，其行为基本类似于内存。它是外部函数的参数所必需的，但也可以用于其他变量。
 
-56. Data Location & Assignment: Data locations are not only relevant for persistence of data, but also for the semantics of assignments.
+56. 数据位置和分配：数据位置不仅与数据的持久性相关，还与分配的语义相关。
 
-    1. Assignments between storage and memory (or from calldata) always create an independent copy.
-    2. Assignments from memory to memory only create references. This means that changes to one memory variable are also visible in all other memory variables that refer to the same data.
-    3. Assignments from storage to a local storage variable also only assign a reference.
-    4. All other assignments to storage always copy. Examples for this case are assignments to state variables or to members of local variables of storage struct type, even if the local variable itself is just a reference.
+    1. 存储和内存（或来自调用数据）之间的赋值总是创建一个独立的副本。
+    2. 从内存到内存的赋值只创建引用。这意味着，对一个内存变量的更改，在引用相同数据的所有其他内存变量中也可见。
+    3. 从存储到本地存储变量的赋值也只赋值引用。
+    4. 所有其他赋值给存储的内容始终复制。这种情况下的示例是，对状态变量的赋值，或存储结构类型的局部变量成员的赋值，即使局部变量本身只是一个引用。
 
-57. Arrays: Arrays can have a compile-time fixed size, or they can have a dynamic size
+57. 数组：数组可以具有编译时固定的大小，也可以具有动态大小。
 
-    1. The type of an array of fixed size k and element type T is written as T[k], and an array of dynamic size as T[].
-    2. Indices are zero-based
-    3. Array elements can be of any type, including mapping or struct. 
-    4. Accessing an array past its end causes a failing assertion
+    1. 固定大小k和元素类型T的数组的类型写为T[k]，动态大小的数组写为T[]。
+    2. 索引从零开始。
+    3. 数组元素可以是任何类型，包括映射或结构。 
+    4. 访问数组的末尾会导致断言失败。
 
-58. Array members:
+58. 数组成员：
 
-    1. *length*: returns number of elements in array
-    2. *push()*: appends a zero-initialised element at the end of the array and returns a reference to the element
-    3. *push(x)*: appends a given element at the end of the array and returns nothing
-    4. *pop*: removes an element from the end of the array and implicitly calls delete on the removed element
+    1. *length*: 返回数组中的元素数
+    2. *push()*: 在数组末尾附加一个初始化为零的元素，并返回对该元素的引用
+    3. *push(x)*: 在数组末尾附加给定元素，但不返回任何内容
+    4. *pop*: 从数组末尾删除一个元素，并对删除的元素隐式调用delete
 
-59. Variables of type *bytes* and *string* are special arrays
+59. *bytes* 和 *string* 类型的变量是特殊数组
 
-    1. *bytes* is similar to *byte[]*, but it is packed tightly in calldata and memory
-    2. *string* is equal to *bytes* but does not allow length or index access
-    3. Solidity does not have string manipulation functions, but there are third-party string libraries
-    4. Use *bytes* for arbitrary-length raw byte data and *string* for arbitrary-length string (UTF-8) data
-    5. Use *bytes* over *byte[]* because it is cheaper, since *byte[]* adds 31 padding bytes between the elements
-    6. If you can limit the length to a certain number of bytes, always use one of the value types *bytes1* to *bytes32* because they are much cheaper
+    1. *bytes* 类似于*byte[]*，但它被紧密地封装在calldata和内存中
+    2. *string* 等于 *bytes* ，但不允许长度或索引访问
+    3. Solidity没有字符串操作函数，但有第三方字符串库
+    4. 对于任意长度的原始字节数据使用*bytes*，对于任意长度字符串（UTF-8）数据使用*string*
+    5. 使用*byte*比*byte[]*更便宜，因为后者在元素之间添加了31个填充字节
+    6. 如果可以将长度限制为特定的字节数，请始终使用值类型*bytes1*到*bytes32*中的一种，因为它们要便宜得多
 
-60. Memory Arrays: Memory arrays with dynamic length can be created using the *new* operator
+60. 内存数组：可以使用*new*运算符创建具有动态长度的内存数组
 
-    1. As opposed to storage arrays, it is not possible to resize memory arrays i.e. the *.push* member functions are not available
-    2. You either have to calculate the required size in advance or create a new memory array and copy every element
+    1. 与存储数组不同，无法调整内存数组的大小，即*.push*成员函数不可用
+    2. 要么必须事先计算所需的大小，要么创建一个新的内存数组并复制每个元素
 
-61. Array Literals: An array literal is a comma-separated list of one or more expressions, enclosed in square brackets ([…])
+61. 数组字面量：数组字面量是一个或多个表达式的逗号分隔列表，用方括号括起来（[…]）
 
-    1. It is always a statically-sized memory array whose length is the number of expressions
-    2. The base type of the array is the type of the first expression on the list such that all other expressions can be implicitly converted to it. It is a type error if this is not possible.
-    3. Fixed size memory arrays cannot be assigned to dynamically-sized memory arrays
+    1. 它总是一个静态大小的内存数组，其长度是表达式的数量。
+    2. 数组的基类型是列表中第一个表达式的类型，这样，所有其他表达式都可以隐式转换为它。如果不可能，则为类型错误。
+    3. 固定大小的内存数组不能赋值给动态大小的内存数组。
 
-62. Gas costs of push and pop: Increasing the length of a storage array by calling push() has constant gas costs because storage is zero-initialised, while decreasing the length by calling pop() has a cost that depends on the “size” of the element being removed. If that element is an array, it can be very costly, because it includes explicitly clearing the removed elements similar to calling delete on them.
+62. push和pop的gas成本：通过调用push（）增加存储数组的长度具有恒定的gas成本，因为存储是零初始化的，而通过调用pop（）减少长度的成本取决于要删除的元素的“大小”。如果该元素是一个数组，那么代价可能非常高，因为它包括显式清除移除的元素，类似于对其调用delete。
 
-63. Array Slices: Array slices are a view on a contiguous portion of an array. They are written as x[start:end], where start and end are expressions resulting in a uint256 type (or implicitly convertible to it). The first element of the slice is x[start] and the last element is x[end - 1]
+63. 数组切片：数组切片是数组的连续部分上的视图。它们被写成x[start:end]，其中start和end是导致uint256类型（或隐式转换为它）的表达式。切片的第一个元素是x[start]，最后一个元素是x[end-1]
 
-    1. If start is greater than end or if end is greater than the length of the array, an exception is thrown
-    2. Both start and end are optional: start defaults to 0 and end defaults to the length of the array
-    3. Array slices do not have any members
-    4. They are implicitly convertible to arrays of their underlying type and support index access. Index access is not absolute in the underlying array, but relative to the start of the slice
-    5. Array slices do not have a type name which means no variable can have an array slices as type and they only exist in intermediate expressions
-    6. Array slices are only implemented for calldata arrays.
-    7. Array slices are useful to ABI-decode secondary data passed in function parameters
+    1. 如果start大于end或end大于数组长度，则引发异常
+    2. start 和 end 都是可选的：start默认为0，end默认为数组长度
+    3. 数组切片没有任何成员
+    4. 它们可以隐式转换为其基础类型的数组，并支持索引访问。索引访问在基础数组中不是绝对的，而是相对于切片的start而言的
+    5. 数组切片没有类型名称，这意味着，任何变量都不能将数组切片作为类型，它们只存在于中间表达式中
+    6. 数组切片仅为calldata数组实现
+    7. 数组切片对于ABI解码传入函数参数的辅助数据非常有用
 
-64. Struct Types: Structs help define new aggregate types by combining other value/reference types into one unit. Struct types can be used inside mappings and arrays and they can themselves contain mappings and arrays. It is not possible for a struct to contain a member of its own type
+64. 结构类型：通过将其他值/引用类型组合为一个单元，Structs 有助于定义新的聚合类型。结构类型可以在映射和数组中使用，它们本身可以包含映射和数组。Structs 不可能包含自己类型的成员。
 
-65. Mapping Types: Mappings define key-value pairs and are declared using the syntax *mapping(_KeyType => _ValueType) _VariableName.* 
+65. 映射类型：映射定义键值对，并使用语法*Mapping（_KeyType=>_ValueType）_VariableName声明*
 
-    1. The *_KeyType* can be any built-in value type, bytes, string, or any contract or enum type. Other user-defined or complex types, such as mappings, structs or array types are not allowed. *_ValueType* can be any type, including mappings, arrays and structs.
-    2. Key data is not stored in a mapping, only its keccak256 hash is used to look up the value
-    3. They do not have a length or a concept of a key or value being set
-    4. They can only have a data location of storage and thus are allowed for state variables, as storage reference types in functions, or as parameters for library functions
-    5. They cannot be used as parameters or return parameters of contract functions that are publicly visible. These restrictions are also true for arrays and structs that contain mappings.
-    6. You cannot iterate over mappings, i.e. you cannot enumerate their keys. It is possible, though, to implement a data structure on top of them and iterate over that.
+    1. *_KeyType*可以是任何内置值类型、字节、字符串或任何合约或枚举类型。不允许使用其他用户定义的或复杂的类型（例如：映射、结构或数组类型）。*_ValueType*可以是任何类型，包括映射、数组和结构。
+    2. 键数据不存储在映射中，仅使用其keccak256哈希来查找值
+    3. 它们没有设置键或值的长度或概念
+    4. 它们只具有存储的数据位置，因此允许用于状态变量、函数中的存储引用类型或库函数的参数
+    5. 它们不能用作公开可见的合约函数的参数或返回参数。这些限制也适用于包含映射的数组和结构。
+    6. 不能迭代映射，即不能枚举它们的键。不过，在它们之上实现一个数据结构并对其进行迭代是可能的。
 
-66. Operators Involving LValues (i.e. a variable or something that can be assigned to)
+66. 涉及LValues的运算符（即变量或可赋值的对象）
 
-    1. a += e is equivalent to a = a + e. The operators -=, *=, /=, %=, |=, &= and ^= are defined accordingly
-    2. a++ and a-- are equivalent to a += 1 / a -= 1 but the expression itself still has the previous value of a
-    3. In contrast, --a and ++a have the same effect on a but return the value after the change
+    1. a+=e等同于a=a+e。相应定义运算符-=、*=、/=、%=、|=、&=和^=
+    2. a++和a--等同于a+=1/a-=1，但表达式本身仍然具有a的前一个值
+    3. 相反，--a和++a对a的影响相同，但在更改后返回值
 
 67. delete
 
-    1. delete a assigns the initial value for the type to a
-    2. For integers it is equivalent to a = 0
-    3. For arrays, it assigns a dynamic array of length zero or a static array of the same length with all elements set to their initial value
-    4. *delete a[x]* deletes the item at index x of the array and leaves all other elements and the length of the array untouched
-    5. For structs, it assigns a struct with all members reset
-    6. delete has no effect on mappings. So if you delete a struct, it will reset all members that are not mappings and also recurse into the members unless they are mappings.
-    7. For mappings, individual keys and what they map to can be deleted: If a is a mapping, then delete a[x] will delete the value stored at x
+    1. delete a将类型的初始值分配给a
+    2. 对于整数，相当于a=0
+    3. 对于数组，它指定长度为零的动态数组或长度相同的静态数组，所有元素都设置为其初始值
+    4. *delete a[x]* 删除数组索引x处的项，保留所有其他元素和数组长度不变
+    5. 对于结构，它将分配一个所有成员都重置的结构
+    6. delete对映射没有影响。因此，如果删除一个结构，它将重置所有不是映射的成员，并递归到成员中，除非它们是映射。
+    7. 对于映射，可以删除单个键及其映射到的内容：如果a是映射，则删除a[x]将删除存储在x处的值
 
-68. Implicit Conversions: An implicit type conversion is automatically applied by the compiler in some cases during assignments, when passing arguments to functions and when applying operators
+68. 隐式转换：在某些情况下，在赋值期间、向函数传递argument参数时以及应用运算符时，编译器会自动应用隐式类型转换。
 
-    1. implicit conversion between value-types is possible if it makes sense semantically and no information is lost
-    2. For example, uint8 is convertible to uint16 and int128 to int256, but int8 is not convertible to uint256, because uint256 cannot hold values such as -1
+    1. 如果值类型在语义上有意义并且没有信息丢失，则值类型之间的隐式转换是可能的
+    2. 例如，uint8可以转换为uint16，int128可以转换为int256，但int8不能转换为uind256，因为uint256不能保存诸如-1的值
 
-69. Explicit Conversions: If the compiler does not allow implicit conversion but you are confident a conversion will work, an explicit type conversion is sometimes possible. This may result in unexpected behaviour and allows you to bypass some security features of the compiler e.g. int to uint
+69. 显式转换：如果编译器不允许隐式转换，但你确信转换可以工作，则有时可以进行显式类型转换。这可能会导致意外行为，并允许你绕过编译器的某些安全特性（例如，int到uint）
 
-    1. If an integer is explicitly converted to a smaller type, higher-order bits are cut off
-    2. If an integer is explicitly converted to a larger type, it is padded on the left (i.e., at the higher order end)
-    3. Fixed-size bytes types while explicitly converting to a smaller type and will cut off the bytes to the right
-    4. Fixed-size bytes types while explicitly converting to a larger type and will pad bytes to the right.
+    1. 如果整数被显式转换为较小的类型，则高阶位被截断
+    2. 如果整数被显式转换为更大的类型，则会在左侧填充（即，在更高阶的末尾）
+    3. 固定大小的字节类型，同时显式转换为较小的类型，并将向右截断字节
+    4. 固定大小的字节类型，同时显式转换为更大的类型，并将字节填充到右侧。
 
-70. Conversions between Literals and Elementary Types
+70. 字面量同基本类型之间的转换
 
-    1. Decimal and hexadecimal number literals can be implicitly converted to any integer type that is large enough to represent it without truncation
-    2. Decimal number literals cannot be implicitly converted to fixed-size byte arrays
-    3. Hexadecimal number literals can be, but only if the number of hex digits exactly fits the size of the bytes type. As an exception both decimal and hexadecimal literals which have a value of zero can be converted to any fixed-size bytes type
-    4. String literals and hex string literals can be implicitly converted to fixed-size byte arrays, if their number of characters matches the size of the bytes type
+    1. 十进制和十六进制数字字面量可以隐式转换为足够大的任何整数类型，无需截断即可表示
+    2. 十进制数字文本不能隐式转换为固定大小的字节数组
+    3. 十六进制数字字面量可以，但前提是十六进制数字的数量正好符合字节类型的大小。作为例外，值为零的十进制和十六进制字面量都可以转换为任何固定大小的字节类型
+    4. 如果字符串字面量和同十六进制字符串字面量的字符数与字节类型的大小匹配，则可以隐式转换为固定大小的字节数组
 
-71. A literal number can take a suffix of wei, gwei (1e9) or ether (1e18) to specify a sub-denomination of Ether
+71. 字面量数字可以带后缀wei、gwei（1e9）或ether（1e18）来指定ether的子面值
 
-72. Suffixes like seconds, minutes, hours, days and weeks after literal numbers can be used to specify units of time where seconds are the base unit where 1 == 1 seconds,1 minutes == 60 seconds, 1 hours == 60 minutes, 1 days == 24 hours and 1 weeks == 7 days
+72. 字面量数字后的后缀（如秒、分钟、小时、天和周）可用于指定时间单位，其中秒是基本单位，其中1==1秒、1分钟==60秒、1小时==60分钟、1天==24小时和1周==7天
 
-    1. Take care if you perform calendar calculations using these units, because not every year equals 365 days and not even every day has 24 hours because of leap seconds
-    2. These suffixes cannot be applied directly to variables but can be applied by multiplication
+    1. 如果您使用这些单位进行日历计算，请务必小心，因为存在闰秒，不是每年都等于365天，也不是每天都有24小时
+    2. 这些后缀不能直接应用于变量，但可以通过乘法应用
 
-73. Block and Transaction Properties:
+73. 块和交易属性：
 
-    1. *blockhash(uint blockNumber)* returns *(bytes32)*: hash of the given block - only works for 256 most recent, excluding current, blocks
-    2. *block.chainid (uint)*: current chain id
-    3. *block.coinbase (address payable)*: current block miner’s address
-    4. *block.difficulty (uint)*: current block difficulty
-    5. *block.gaslimit (uint)*: current block gaslimit
-    6. *block.number (uint)*: current block number
-    7. *block.timestamp (uint)*: current block timestamp as seconds since unix epoch
-    8. *msg.data (bytes calldata)*: complete calldata
-    9. *msg.sender (address)*: sender of the message (current call)
-    10. *msg.sig (bytes4)*: first four bytes of the calldata (i.e. function identifier)
-    11. *msg.value (uint)*: number of wei sent with the message
-    12. *tx.gasprice (uint)*: gas price of the transaction
-    13. *gasleft() returns (uint256)*: remaining gas
-    14. *tx.origin (address)*: sender of the transaction (full call chain)
+    1. *blockhash(uint blockNumber)* returns *(bytes32)*: 给定块的哈希-仅适用于256个最新的块（不包括当前块）
+    2. *block.chainid (uint)*: 当前链的 id
+    3. *block.coinbase (address payable)*: 当前块的矿工地址
+    4. *block.difficulty (uint)*: 当前块难度
+    5. *block.gaslimit (uint)*: 当前块 gaslimit
+    6. *block.number (uint)*: 当前块数
+    7. *block.timestamp (uint)*: 当前块时间戳（自unix时期以来的秒）
+    8. *msg.data (bytes calldata)*: 完成的 calldata
+    9. *msg.sender (address)*: 消息的发送者（当前调用）
+    10. *msg.sig (bytes4)*: calldata的前四个字节（即函数标识符）
+    11. *msg.value (uint)*: 随邮件发送的wei数量
+    12. *tx.gasprice (uint)*: 交易的gas价格
+    13. *gasleft() returns (uint256)*: 剩余 gas
+    14. *tx.origin (address)*: 交易发送方（完整的 call chain）
 
-74. The values of all members of msg, including msg.sender and msg.value can change for every external function call. This includes calls to library functions.
+74. msg的所有成员（包括msg.sender和msg.value）的值可以在每次外部函数调用时更改。这包括对库函数的调用。
 
-75. Do not rely on block.timestamp or blockhash as a source of randomness. Both the timestamp and the block hash can be influenced by miners to some degree. The current block timestamp must be strictly larger than the timestamp of the last block, but the only guarantee is that it will be somewhere between the timestamps of two consecutive blocks in the canonical chain. 
+75. 不要依赖block.timestamp或blockhash作为随机性的来源。时间戳和块哈希在一定程度上都会受到矿工的影响。当前块时间戳必须严格大于最后一个块的时间戳，但唯一的保证是，它将位于主链（canonical chain）中两个连续块的时间标记之间。
 
-76. The block hashes are not available for all blocks for scalability reasons. You can only access the hashes of the most recent 256 blocks, all other values will be zero.
+76. 由于可扩展性的原因，块哈希并不是所有块都可用。您只能访问最近256个块的哈希值，所有其他值都将为零。
 
-77. ABI Encoding and Decoding Functions:
+77. ABI编码和解码函数：
 
-    1. *abi.decode(bytes memory encodedData, (...)) returns (...)*: ABI-decodes the given data, while the types are given in parentheses as second argument.
-    2. *abi.encode(...)* returns (bytes memory): ABI-encodes the given arguments
-    3. *abi.encodePacked(...)* returns (bytes memory): Performs packed encoding of the given arguments. Note that packed encoding can be ambiguous!
-    4. *abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)*: ABI-encodes the given arguments starting from the second and prepends the given four-byte selector
-    5. *abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)*: Equivalent to abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), …)
+    1. *abi.decode(bytes memory encodedData, (...)) returns (...)*: ABI解码给定的数据，而类型在括号中作为第二个argument参数给出。
+    2. *abi.encode(...)* returns (bytes memory): ABI对给定argument参数进行编码
+    3. *abi.encodePacked(...)* returns (bytes memory): 对给定argument参数执行压缩编码。请注意，压缩编码可能不明确！
+    4. *abi.encodeWithSelector(bytes4 selector, ...) returns (bytes memory)*: ABI从第二个开始对给定的argument参数进行编码，并在给定的四字节选择器前加上前缀
+    5. *abi.encodeWithSignature(string memory signature, ...) returns (bytes memory)*: 相当于 abi.encodeWithSelector(bytes4(keccak256(bytes(signature))), …)
 
-78. Error Handling:
+78. 错误处理：
 
-    1. *assert(bool condition)*: causes a Panic error and thus state change reversion if the condition is not met - to be used for internal errors.
-    2. *require(bool condition)*: reverts if the condition is not met - to be used for errors in inputs or external components.
-    3. *require(bool condition, string memory message)*: reverts if the condition is not met - to be used for errors in inputs or external components. Also provides an error message.
-    4. *revert()*: abort execution and revert state changes
-    5. *revert(string memory reason)*: abort execution and revert state changes, providing an explanatory string
+    1. *assert(bool condition)*: 如果不满足条件，则会导致Panic错误，从而导致state change reversion-用于内部错误。
+    2. *require(bool condition)*: 如果不满足该条件，则revert-用于输入或外部组件中的错误。
+    3. *require(bool condition, string memory message)*: 如果不满足该条件，则revert-用于输入或外部组件中的错误。还提供了一条错误消息。
+    4. *revert()*: 中止执行并revert状态更改
+    5. *revert(string memory reason)*: 中止执行并revert状态更改，提供解释字符串
 
-79. Mathematical and Cryptographic Functions:
+79. 数学和密码函数：
 
-    1. *addmod(uint x, uint y, uint k) returns (uint)*: compute (x + y) % k where the addition is performed with arbitrary precision and does not wrap around at 2**256. Assert that k != 0 starting from version 0.5.0.
-    2. *mulmod(uint x, uint y, uint k) returns (uint)*: compute (x * y) % k where the multiplication is performed with arbitrary precision and does not wrap around at 2**256. Assert that k != 0 starting from version 0.5.0.
-    3. *keccak256(bytes memory) returns (bytes32)*: compute the Keccak-256 hash of the input
-    4. *sha256(bytes memory) returns (bytes32)*: compute the SHA-256 hash of the input
-    5. *ripemd160(bytes memory) returns (bytes20)*: compute RIPEMD-160 hash of the input
-    6. *ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address):* recover the address associated with the public key from elliptic curve signature or return zero on error. The function parameters correspond to ECDSA values of the signature: *r = first 32 bytes of signature, s = second 32 bytes of signature, v = final 1 byte of signature. ecrecover* returns an address, and not an address payable.
+    1. *addmod(uint x, uint y, uint k) returns (uint)*: 计算（x+y）%k，其中以任意精度执行加法，并且不在2**256处环绕。断言k！=0从版本0.5.0开始。
+    2. *mulmod(uint x, uint y, uint k) returns (uint)*: 计算（x*y）%k，其中乘法以任意精度执行，且不在2**256处环绕。断言k！=0从版本0.5.0开始。
+    3. *keccak256(bytes memory) returns (bytes32)*: 计算输入的Keccak-256哈希
+    4. *sha256(bytes memory) returns (bytes32)*: 计算输入的SHA-256哈希
+    5. *ripemd160(bytes memory) returns (bytes20)*: 计算输入的RIPEMD-160哈希
+    6. *ecrecover(bytes32 hash, uint8 v, bytes32 r, bytes32 s) returns (address):* 从椭圆曲线签名中恢复与公钥相关联的地址，或在错误时返回零。函数参数对应于签名的ECDSA值：*r=签名的前32个字节，s=签名的第二个32字节，v=签名的最后1个字节。ecrecover*返回address，而不是address payable。
 
-80. If you use *ecrecover*, be aware that a valid signature can be turned into a different valid signature without requiring knowledge of the corresponding private key. This is usually not a problem unless you require signatures to be unique or use them to identify items. OpenZeppelin has a ECDSA helper library that you can use as a wrapper for *ecrecover* without this issue.
+80. 如果你使用*ecrecover*，请注意，有效签名可以转换为不同的有效签名，而不需要知道相应的私钥。这通常不是问题，除非你要求签名是唯一的或使用它们来标识项目。OpenZeppelin有一个ECDSA助手库，你可以将其用作*ecrecover*的包装器，而不会出现此问题。
 
-81. Contract Related:
+81. 合约相关
 
-    1. *this* (current contract’s type): the current contract, explicitly convertible to Address
-    2. *selfdestruct(address payable recipient)*: Destroy the current contract, sending its funds to the given Address and end execution. 
+    1. *this* （当前合约的类型）：当前合约，可显式转换为Address
+    2. *selfdestruct(address payable recipient)*: 销毁当前合约，将其资金发送到给定地址并结束执行。
 
-82. *selfdestruct* has some peculiarities: the receiving contract’s receive function is not executed and the contract is only really destroyed at the end of the transaction and revert’s might “undo” the destruction.
+82. *selfdestruct* 具有一些特殊性：接收合约的接收功能没有执行，合约只有在交易结束时才被真正销毁，而revert可能会“撤消”销毁。
 
-83. Type Information: The expression type(X) can be used to retrieve information about the type X, where X can be either a contract or an integer type. For a contract type C, the following type information is available:
+83. 类型信息：表达式类型（X）可用于检索有关类型X的信息，其中X可以是合约类型或整数类型。对于C类合约，可提供以下类型信息：
 
-    1. *type(C).name*: The name of the contract.
-    2. *type(C).creationCode*: Memory byte array that contains the creation bytecode of the contract. This can be used in inline assembly to build custom creation routines, especially by using the create2 opcode. This property cannot be accessed in the contract itself or any derived contract. It causes the bytecode to be included in the bytecode of the call site and thus circular references like that are not possible.
-    3. *type(C).runtimeCode*: Memory byte array that contains the runtime bytecode of the contract. This is the code that is usually deployed by the constructor of C. If C has a constructor that uses inline assembly, this might be different from the actually deployed bytecode. Also note that libraries modify their runtime bytecode at time of deployment to guard against regular calls. The same restrictions as with .*creationCode* also apply for this property.
-    4. For an interface type I, the following type information is available: *type(I).interfaceId*: A bytes4 value containing the EIP-165 interface identifier of the given interface I. This identifier is defined as the XOR of all function selectors defined within the interface itself - excluding all inherited functions.
+    1. *type(C).name*: 合约名称。
+    2. *type(C).creationCode*: 包含合约创建字节码的内存字节数组。这可以在内联程序集中用于构建自定义创建例程，特别是通过使用create2操作码。无法在合约本身或任何派生合约中访问此属性。它导致字节码包含在调用站点的字节码中，因此不可能进行循环引用。
+    3. *type(C).runtimeCode*: 包含合约的运行时字节码的内存字节数组。这通常是由C的构造器部署的代码。如果C有一个使用内联程序集的构造器，这可能与实际部署的字节码不同。还要注意，库在部署时修改其运行时字节码，以防止常规调用。与.*creationCode*相同的限制也适用于此属性。
+    4. 对于接口类型I，以下类型信息可用：*type（I）.interfaceId*：包含给定接口I的EIP-165接口标识符的bytes4值。该标识符定义为接口本身内定义的所有函数选择器的XOR，不包括所有继承的函数。
 
-84. For an integer type T, , the following type information is available:
+84. 对于整数类型T，以下类型信息可用：
 
-    1. *type(T).min*: The smallest value representable by type T.
-    2. *type(T).max*: The largest value representable by type T.
+    1. *type(T).min*: 类型T表示的最小值。
+    2. *type(T).max*: 类型T表示的最大值。
 
-85. Control Structures: Solidity has *if, else, while, do, for, break, continue, return*, with the usual semantics known from C or JavaScript
+85. 控制结构：Solidity中的*if、else、while、do、for、break、continue、return*具有C或JavaScript中常见的语义
 
-    1. Parentheses can not be omitted for conditionals, but curly braces can be omitted around single-statement bodies
-    2. Note that there is no type conversion from non-boolean to boolean types as there is in C and JavaScript, so *if (1) { ... }* is not valid Solidity.
+    1. 条件句不能省略括号，但单语句体可以省略大括号
+    2. 注意，没有像C和JavaScript那样从非布尔型到布尔型的类型转换，因此*if（1）｛…｝*不是有效的Solidity。
 
-86. Exceptions: Solidity uses state-reverting exceptions to handle errors. Such an exception undoes all changes made to the state in the current call (and all its sub-calls) and flags an error to the caller
+86. 异常：Solidity使用state-reverting异常来处理错误。这种异常将撤消对当前调用（及其所有子调用）中状态所做的所有更改，并向调用者标记错误
 
-    1. When exceptions happen in a sub-call, they “bubble up” (i.e., exceptions are rethrown) automatically. Exceptions to this rule are send and the low-level functions *call*, *delegatecall* and *staticcall*: they return false as their first return value in case of an exception instead of “bubbling up”.
-    2. Exceptions in external calls can be caught with the *try/catch* statement
-    3. Exceptions can contain data that is passed back to the caller. This data consists of a 4-byte selector and subsequent ABI-encoded data. The selector is computed in the same way as a function selector, i.e., the first four bytes of the keccak256-hash of a function signature - in this case an error signature.
-    4. Solidity supports two error signatures: Error(string) and Panic(uint256). The first (“error”) is used for “regular” error conditions while the second (“panic”) is used for errors that should not be present in bug-free code.
+    1. 当子调用中发生异常时，它们会自动“bubbling up”（即，异常被重新抛出）。此规则的异常是send和低级函数*call*, *delegatecall*和*staticcall*：它们在出现异常时返回false作为第一个返回值，而不是“bubbling up”。
+    2. 可以使用*try/catch*语句捕获外部调用中的异常
+    3. 异常可以包含传回调用者的数据。该数据由4字节选择器和随后的ABI编码数据组成。选择器的计算方式与函数选择器相同，即函数签名的keccak256哈希的前四个字节，在本例中为错误签名。
+    4. Solidity支持两个错误签名：error（字符串）和Panic（uint256）。第一个（“error”）用于“常规”错误条件，而第二个（“panic”）用于无错误代码中不应出现的错误。
 
-87. The low-level functions *call*, *delegatecall* and *staticcall* return true as their first return value if the account called is non-existent, as part of the design of the EVM. Account existence must be checked prior to calling if needed.
+87. 作为以太坊虚拟机设计的一部分，如果调用的帐户不存在，低级函数*call*、*delegatecall*和*staticcall*将返回true作为其第一个返回值。如果需要，在调用之前必须检查帐户是否存在。
 
-88. The *assert* function creates an error of type Panic(uint256). Assert should only be used to test for internal errors, and to check invariants. Properly functioning code should never create a Panic, not even on invalid external input. 
+88. *assert* 函数创建Panic（uint256）类型的错误。断言只能用于测试内部错误和检查不变量。正常运行的代码永远不会产生Panic，即使是在无效的外部输入上也不会。 
 
-89. A Panic exception is generated in the following situations. The error code supplied with the error data indicates the kind of panic:
+89. 在以下情况下会生成Panic异常。与错误数据一起提供的错误代码表示Panic的类型：
 
-    1. 0x01: If you call assert with an argument that evaluates to false.
-    2. 0x11: If an arithmetic operation results in underflow or overflow outside of an unchecked { ... } block.
-    3. 0x12; If you divide or modulo by zero (e.g. 5 / 0 or 23 % 0).
-    4. 0x21: If you convert a value that is too big or negative into an enum type.
-    5. 0x22: If you access a storage byte array that is incorrectly encoded.
-    6. 0x31: If you call .pop() on an empty array.
-    7. 0x32: If you access an array, bytesN or an array slice at an out-of-bounds or negative index (i.e. x[i] where i >= x.length or i < 0).
-    8. 0x41: If you allocate too much memory or create an array that is too large.
-    9. 0x51: If you call a zero-initialized variable of internal function type.
+    1. 0x01: 如果使用求值为false的argument参数调用assert。
+    2. 0x11: 如果算术运算导致未检查的｛…｝块外的下溢或溢出。
+    3. 0x12; 如果你用零除或模（例如：5/0或23%0）。
+    4. 0x21: 如果将太大或负的值转换为枚举类型。
+    5. 0x22: 如果访问的存储字节数组编码错误。
+    6. 0x31: 如果对空数组调用.pop（）。
+    7. 0x32: 如果你访问一个数组、字节N或一个超出边界或负索引的数组切片（即x[i]，其中i>=x.length或i<0）。
+    8. 0x41: 如果分配的内存太多或创建的数组太大。
+    9. 0x51: 如果调用内部函数类型的零初始化变量。
 
-90. The *require* function either creates an error of type Error(string) or an error without any error data and it should be used to ensure valid conditions that cannot be detected until execution time. This includes conditions on inputs or return values from calls to external contracts. You can optionally provide a message string for *require*, but not for *assert*.
+90. *require*函数要么创建error（字符串）类型的错误，要么创建没有任何错误数据的错误，应该使用它来确保在执行之前无法检测到的有效条件。这包括对外部合约调用的输入或返回值的条件。你可以选择为*require*提供消息字符串，但不能为*assert*提供消息。
 
-91. A *Error(string)* exception (or an exception without data) is generated in the following situations:
+91. 在以下情况下会生成*Error(string)*异常（或没有数据的异常）：
 
-    1. Calling *require* with an argument that evaluates to false.
-    2. If you perform an external function call targeting a contract that contains no code
-    3. If your contract receives Ether via a public function without payable modifier (including the constructor and the fallback function)
-    4. If your contract receives Ether via a public getter function
+    1. 使用计算结果为false的argument参数调用*require*。
+    2. 如果针对不包含代码的合约执行外部函数调用
+    3. 如果你的合约通过公共函数接收以太币，而不需要支付修饰符（包括构造器和fallback函数）
+    4. 如果你的合约通过public getter函数接收Ether
 
-92. *revert*: A direct revert can be triggered using the revert statement and the revert function. The revert statement takes a custom error as a direct argument without parentheses: revert CustomError(arg1, arg2). The *revert()* function is another way to trigger exceptions from within other code blocks to flag an error and revert the current call. The function takes an optional string message containing details about the error that is passed back to the caller and it will create an Error(string) exception. Using a custom error instance will usually be much cheaper than a string description, because you can use the name of the error to describe it, which is encoded in only four bytes. A longer description can be supplied via NatSpec which does not incur any costs.
+92. *revert*: 可以使用revert语句和revert函数触发直接revert。revert语句将自定义错误作为不带括号的直接argument参数：revert CustomError（arg1，arg2）。*revert（）*函数是从其他代码块中触发异常以标记错误，并revert当前调用的另一种方法。该函数接受一个可选的字符串消息，其中包含返回给调用者的错误的详细信息，并将创建一个error（字符串）异常。使用自定义错误实例通常比字符串描述便宜得多，因为可以使用错误的名称来描述它，该名称仅用四个字节编码。可以通过NatSpec提供更长的描述，这不会产生任何成本。
 
-93. *try/catch*: The *try* keyword has to be followed by an expression representing an external function call or a contract creation (*new ContractName()*). Errors inside the expression are not caught (for example if it is a complex expression that also involves internal function calls), only a revert happening inside the external call itself. The returns part (which is optional) that follows declares return variables matching the types returned by the external call. In case there was no error, these variables are assigned and the contract’s execution continues inside the first success block. If the end of the success block is reached, execution continues after the *catch* blocks.
+93. *try/catch*: *try*关键字必须后跟表示外部函数调用或合约创建的表达式（*newContractName（）*）。表达式内部的错误不会被捕获（例如，如果它是一个复杂的表达式，同时也涉及内部函数调用），只有在外部调用本身内部发生revert。后面的返回部分（可选）声明与外部调用返回的类型匹配的返回变量。如果没有错误，将赋值这些变量，并在第一个成功块内继续执行合约。如果到达成功块的末尾，则在*catch*块之后继续执行。
 
-94. Solidity supports different kinds of catch blocks depending on the type of error:
+94. Solidity支持不同类型的捕获块，具体取决于错误类型：
 
-    1. *catch Error(string memory reason) { ... }*: This catch clause is executed if the error was caused by revert("reasonString") or require(false, "reasonString") (or an internal error that causes such an exception).
-    2. *catch Panic(uint errorCode) { ... }*: If the error was caused by a panic, i.e. by a failing assert, division by zero, invalid array access, arithmetic overflow and others, this catch clause will be run.
-    3. *catch (bytes memory lowLevelData) { ... }*: This clause is executed if the error signature does not match any other clause, if there was an error while decoding the error message, or if no error data was provided with the exception. The declared variable provides access to the low-level error data in that case.
-    4. *catch { ... }*: If you are not interested in the error data, you can just use *catch { ... }* (even as the only catch clause) instead of the previous clause.
+    1. *catch Error(string memory reason) { ... }*: 如果错误是由revert（“reasonString”）或require（false，“reasonString”）（或导致此类异常的内部错误）引起的，则执行此catch子句。
+    2. *catch Panic(uint errorCode) { ... }*: 如果错误是由panic引起的，即断言失败、被零除、无效数组访问、算术溢出等，将运行此catch子句。
+    3. *catch (bytes memory lowLevelData) { ... }*: 如果错误签名与任何其他子句不匹配，在解码错误消息时出现错误，或者未提供异常的错误数据，则执行此子句。在这种情况下，声明的变量提供对低级错误数据的访问。
+    4. *catch { ... }*: 如果对错误数据不感兴趣，可以只使用*catch｛…｝*（甚至作为唯一的catch子句）而不是前面的子句。
 
-95. If execution reaches a catch-block, then the state-changing effects of the external call have been reverted. If execution reaches the success block, the effects were not reverted. If the effects have been reverted, then execution either continues in a catch block or the execution of the try/catch statement itself reverts (for example due to decoding failures as noted above or due to not providing a low-level catch clause). 
+95. 如果执行到达catch块，则外部调用的状态更改效果已revert。如果执行达到成功块，则不会revert效果。如果效果已revert，则执行在catch块中继续，或try/catch语句本身的执行revert（例如，由于如上所述的解码失败或由于未提供低级catch子句）。 
 
-96. The reason behind a failed call can be manifold. Do not assume that the error message is coming directly from the called contract: The error might have happened deeper down in the call chain and the called contract just forwarded it. Also, it could be due to an out-of-gas situation and not a deliberate error condition: The caller always retains 63/64th of the gas in a call and thus even if the called contract goes out of gas, the caller still has some gas left
+96. 调用失败的原因可能多种多样。不要假设错误消息直接来自被调用合约：错误可能发生在调用链的更深处，而被调用合约只是转发了错误消息。此外，这可能是由于gas耗尽的情况，而不是故意的错误情况：调用方在调用中始终保留63%的gas，因此即使被调用合约 gas 耗尽，调用者还剩下一些gas。
 
-97. Programming style: coding conventions for writing solidity code. Style is about consistency. Consistency with style is important. Consistency within a project is more important. Consistency within one module or function is most important. Two main categories: 1) Layout 2) Naming Conventions. Programming style affects readability and maintainability, both of which affect security.
+97. 编程风格：编写实体代码的编码惯例。风格关乎一致性。风格的一致性很重要。项目内的一致性更为重要。一个模块或函数的一致性是最重要的。两个主要类别：1）布局2）命名惯例。编程风格会影响可读性和可维护性，这两者都会影响安全性。
 
-98. Code Layout:
+98. 代码布局：
 
-    1. Indentation: Use 4 spaces per indentation level
-    2. Tabs or Spaces: Spaces are the preferred indentation method. Mixing tabs and spaces should be avoided.
-    3. Blank Lines: Surround top level declarations in solidity source with two blank lines.
-    4. Maximum Line Length: Keeping lines to a maximum of 79 (or 99) characters helps readers easily parse the code.
-    5. Wrapped lines should conform to the following guidelines: The first argument should not be attached to the opening parenthesis. One, and only one, indent should be used. Each argument should fall on its own line. The terminating element, );, should be placed on the final line by itself.
-    6. Source File Encoding: UTF-8 or ASCII encoding is preferred.
-    7. Imports: Import statements should always be placed at the top of the file.
-    8. Order of Functions: Ordering helps readers identify which functions they can call and to find the constructor and fallback definitions easier. Functions should be grouped according to their visibility and ordered: constructor, receive function (if exists), fallback function (if exists), external, public, internal, private. Within a grouping, place the view and pure functions last.
+    1. 缩进：每个缩进级别使用4个空格
+    2. 制表符或空格：空格是首选的缩进方法。应避免混淆标签和空格。
+    3. 空行：用两个空行括住solidity源中的顶级声明。
+    4. 最大行长度：保持行的最大长度为79（或99）个字符有助于读者轻松解析代码。
+    5. 换行符应符合以下准则：第一个argument参数不应附加到左括号。只能使用一个缩进。每个argument参数都应该在其行上。terminating element, );,应单独放置在最后一行。
+    6. 源文件编码：首选UTF-8或ASCII编码。
+    7. 导入：导入语句应始终放在文件的顶部。
+    8. 函数顺序：排序有助于读者确定可以调用哪些函数，并更容易找到构造器和fallack定义。函数应根据其可见性和顺序进行分组：constructor, receive function（如果存在）、fallback function（如果有）、external, public, internal, private。在分组中，将view和pure函数放在最后。
 
-99. More Code Layout:
+99. 更多代码布局：
 
-    1. Whitespace in Expressions: Avoid extraneous whitespace in the following situations — Immediately inside parenthesis, brackets or braces, with the exception of single line function declarations.
-    2. Control Structures: The braces denoting the body of a contract, library, functions and structs should: open on the same line as the declaration, close on their own line at the same indentation level as the beginning of the declaration. The opening brace should be preceded by a single space.
-    3. Function Declaration: For short function declarations, it is recommended for the opening brace of the function body to be kept on the same line as the function declaration. The closing brace should be at the same indentation level as the function declaration. The opening brace should be preceded by a single space.
-    4. Mappings: In variable declarations, do not separate the keyword mapping from its type by a space. Do not separate any nested mapping keyword from its type by whitespace.
-    5. Variable Declarations: Declarations of array variables should not have a space between the type and the brackets.
-    6. Strings should be quoted with double-quotes instead of single-quotes.
-    7. Operators: Surround operators with a single space on either side. Operators with a higher priority than others can exclude surrounding whitespace in order to denote precedence.This is meant to allow for improved readability for complex statements. You should always use the same amount of whitespace on either side of an operator
-    8. Layout contract elements in the following order: Pragma statements, Import statements, Interfaces, Libraries, Contracts. Inside each contract, library or interface, use the following order: Type declarations, State variables, Events, Functions
+    1. 表达式中的空格：在以下情况下避免多余的空格-括号、括号或大括号内，单行函数声明除外。
+    2. 控制结构：表示合约、库、函数和结构体的大括号应该：在声明的同一行上打开，在声明开头的缩进级别上关闭。大括号前应加一个空格。
+    3. 函数声明：对于简短的函数声明，建议函数体的左大括号与函数声明保持在同一行。右大括号应与函数声明处于相同的缩进级别。大括号前应加一个空格。
+    4. 映射：在变量声明中，不要用空格将关键字映射与其类型分开。不要用空格将任何嵌套的映射关键字与其类型分开。
+    5. 变量声明：数组变量的声明在类型和括号之间不应有空格。
+    6. 字符串应使用双引号而不是单引号。
+    7. 运算符：在运算符的两侧使用单个空格。优先级高于其他运算符的运算符可以排除周围的空格以表示优先级。这是为了提高复杂语句的可读性。你应该始终在运算符的两边使用相同数量的空格
+    8. 按以下顺序排列合约元素：Pragma语句、Import语句、接口、库、合约。在每个合约、库或接口中，使用以下顺序：类型声明、状态变量、事件、函数
 
-100. Naming Convention:
+100. 命名规则：
 
-     1. Types: lowercase, lower_case_with_underscores, UPPERCASE, UPPER_CASE_WITH_UNDERSCORES, CapitalizedWords, mixedCase, Capitalized_Words_With_Underscores
-     2. Names to Avoid: l - Lowercase letter el, O - Uppercase letter oh, I - Uppercase letter eye. Never use any of these for single letter variable names. They are often indistinguishable from the numerals one and zero.
-     3. Contracts and libraries should be named using the CapWords style. Contract and library names should also match their filenames. If a contract file includes multiple contracts and/or libraries, then the filename should match the core contract. This is not recommended however if it can be avoided. Examples: SimpleToken, SmartBank, CertificateHashRepository, Player, Congress, Owned.
-     4. Structs should be named using the CapWords style. Examples: MyCoin, Position, PositionXY.
-     5. Events should be named using the CapWords style. Examples: Deposit, Transfer, Approval, BeforeTransfer, AfterTransfer.
-     6. Functions should use mixedCase. Examples: getBalance, transfer, verifyOwner, addMember, changeOwner.
+     1. 小写字母、带下划线的小写字母、大写字母、带下划线的大写字母、首字母大写词、大小写混用（mixedCase）、带下划线的首字母大写词
+     2. 要避免的名称：l-小写字母el，O-大写字母oh，I-大写字母eye。千万不要将其中任何一个用于单字母变量名。它们通常与数字1和0无法区分。
+     3. 合约和库应使用CapWords样式命名。合约和库名称也应与其文件名相匹配。如果合约文件包含多个合约和/或库，则文件名应与核心合约匹配。但是，如果可以避免，则不建议这样做。示例：SimpleToken, SmartBank, CertificateHashRepository, Player, Congress, Owned。
+     4. 结构应使用CapWords样式命名。示例：MyCoin, Position, PositionXY。
+     5. 事件应使用CapWords样式命名。示例：Deposit, Transfer, Approval, BeforeTransfer, AfterTransfer。
+     6. 函数应使用mixedCase。示例：getBalance, transfer, verifyOwner, addMember, changeOwner。
 
-101. More Naming Convention:
+101. 更多命名规则：
 
-     1. Function arguments should use mixedCase. Examples: initialSupply, account, recipientAddress, senderAddress, newOwner.
-     2. Local and state variable names should use mixedCase. Examples: totalSupply, remainingSupply, balancesOf, creatorAddress, isPreSale, tokenExchangeRate.
-     3. Constants should be named with all capital letters with underscores separating words. Examples: MAX_BLOCKS, TOKEN_NAME, TOKEN_TICKER, CONTRACT_VERSION.
-     4. Modifier names should use mixedCase. Examples: onlyBy, onlyAfter, onlyDuringThePreSale.
-     5. Enums, in the style of simple type declarations, should be named using the CapWords style. Examples: TokenGroup, Frame, HashStyle, CharacterLocation.
-     6. Avoiding Naming Collisions: single_trailing_underscore_. This convention is suggested when the desired name collides with that of a built-in or otherwise reserved name.
+     1. 函数argument参数应使用mixedCase。示例：initialSupply, account, recipientAddress, senderAddress, newOwner.
+     2. 本地和状态变量名应使用mixedCase。示例：totalSupply, remainingSupply, balancesOf, creatorAddress, isPreSale, tokenExchangeRate.
+     3. 常量的命名应使用大写字母和下划线分隔单词。示例：MAX_BLOCKS, TOKEN_NAME, TOKEN_TICKER, CONTRACT_VERSION.
+     4. 修饰符名称应使用mixedCase。示例：onlyBy, onlyAfter, onlyDuringThePreSale.
+     5. 简单类型声明样式的枚举应该使用CapWords样式命名。示例：TokenGroup, Frame, HashStyle, CharacterLocation.
+     6. 避免命名冲突：single_trailing_undercore_。当所需名称与内置或保留名称冲突时，建议使用此规则。
 
      ------
 
-     **References**:
+     **参考文献**：
 
      1. https://docs.soliditylang.org/en/v0.8.9/index.html
      2. https://docs.soliditylang.org/en/v0.8.9/resources.html
-     3. Note: The content addresses key aspects from the latest versions. Look at (breaking) changes across versions at https://github.com/ethereum/solidity/blob/develop/Changelog.md, https://docs.soliditylang.org/en/v0.8.9/080-breaking-changes.html and https://docs.soliditylang.org/en/v0.8.9/070-breaking-changes.html
+     3. 注：内容涉及最新版本的主要特性。查看（中断）不同版本的更改：https://github.com/ethereum/solidity/blob/develop/Changelog.md, https://docs.soliditylang.org/en/v0.8.9/080-breaking-changes.html and https://docs.soliditylang.org/en/v0.8.9/070-breaking-changes.html
